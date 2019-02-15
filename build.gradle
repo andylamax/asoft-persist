@@ -47,6 +47,7 @@ kotlin {
         commonMain {
             dependencies {
                 implementation kotlin('stdlib-common')
+                api project(":asoft-rx")
             }
         }
         commonTest {
@@ -58,6 +59,7 @@ kotlin {
         jvmMain {
             dependencies {
                 implementation kotlin('stdlib-jdk8')
+                api project(":asoft-rx")
             }
         }
         jvmTest {
@@ -69,6 +71,7 @@ kotlin {
         jsMain {
             dependencies {
                 implementation kotlin('stdlib-js')
+                api project(":asoft-rx")
             }
         }
         jsTest {
