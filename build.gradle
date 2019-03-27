@@ -18,7 +18,7 @@ repositories {
     mavenCentral()
 }
 
-group 'persist.asofttz.com'
+group 'com.asofttz'
 version '0.0.1'
 
 apply plugin: 'maven-publish'
