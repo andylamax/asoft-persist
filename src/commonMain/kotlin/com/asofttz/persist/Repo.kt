@@ -16,15 +16,5 @@ object RepoFactory {
 
     inline fun <reified T> getRepo(dao: Dao<T>) = (repos.getOrPut(T::class) {
         object : Repo<T>(dao) {}
-    } as Repo<T>).apply {
-        status()
-    }
-
-    fun status() {
-        println("Available repos\n\n")
-        repos.keys.forEach {
-            println("Repo for: ${it.simpleName}")
-        }
-        println("Done")
-    }
+    } as Repo<T>)
 }

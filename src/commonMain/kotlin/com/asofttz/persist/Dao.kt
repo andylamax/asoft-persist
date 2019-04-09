@@ -2,7 +2,8 @@ package com.asofttz.persist
 
 import com.asofttz.rx.ObservableList
 
-abstract class Dao<T> {
+abstract class Dao<T> : Lockable {
+    override var isRunning = false
     protected val cached = ObservableList<T>()
 
     open suspend fun filter(predicate: (T) -> Boolean) = cached.value.filter(predicate)
