@@ -1,9 +1,11 @@
 package com.asofttz.persist.memory
 
+import com.asofttz.persist.memory.*
 import kotlin.js.JsName
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
+@JsName("Test1")
 class `Given a set of data in a memory of strings` {
 
     @Test

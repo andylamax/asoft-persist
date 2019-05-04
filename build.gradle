@@ -48,7 +48,7 @@ kotlin {
         commonMain {
             dependencies {
                 implementation kotlin('stdlib-common')
-                api "com.github.andylamax:asoft-rx:1.0.0"
+                api "com.github.andylamax:asoft-rx:1.0.1"
                 implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core-common:1.1.1'
             }
         }
@@ -82,4 +82,8 @@ kotlin {
             }
         }
     }
+}
+
+compileTestKotlinJs {
+    enabled = false
 }
