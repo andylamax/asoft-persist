@@ -1,6 +1,6 @@
 package com.asofttz.persist.memory
 
-class Memory<T>(val perPage: Int = 100) {
+open class Memory<T>(val perPage: Int = 100) {
     var pages = mutableMapOf<Int, Page<T>>().apply {
         put(0, newFirstPage())
     }

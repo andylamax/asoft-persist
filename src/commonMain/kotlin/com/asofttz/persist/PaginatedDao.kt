@@ -5,6 +5,7 @@ import com.asofttz.persist.memory.ObservableMemory
 
 abstract class PaginatedDao<T> : Lockable {
     override var isRunning = false
+
     protected var memory = ObservableMemory(Memory<T>())
 
     open suspend fun filter(predicate: (T) -> Boolean) = memory.getAll().filter(predicate)
