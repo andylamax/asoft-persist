@@ -17,10 +17,10 @@ repositories {
     mavenCentral()
 }
 
-group 'com.asofttz'
-version '1.0.0'
+group "com.asofttz"
+version '1.0.4'
 
-apply plugin: 'maven-publish'
+apply plugin: "maven-publish"
 
 kotlin {
     jvm() {
