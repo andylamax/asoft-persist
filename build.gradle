@@ -77,13 +77,13 @@ kotlin {
         }
     }
 
-    android() {
-        compilations.all {
-            tasks[compileKotlinTaskName].kotlinOptions {
-                jvmTarget = "1.8"
-            }
-        }
-    }
+//    android() {
+//        compilations.all {
+//            tasks[compileKotlinTaskName].kotlinOptions {
+//                jvmTarget = "1.8"
+//            }
+//        }
+//    }
 
     js() {
         browser {
@@ -148,16 +148,16 @@ kotlin {
             dependsOn jvmMain
             dependsOn jvmCommonTest
         }
-        androidMain {
-            dependsOn jvmCommonMain
-            dependencies {
-                implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutines_version"
-            }
-        }
-        androidTest {
-            dependsOn androidMain
-            dependsOn jvmCommonTest
-        }
+//        androidMain {
+//            dependsOn jvmCommonMain
+//            dependencies {
+//                implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutines_version"
+//            }
+//        }
+//        androidTest {
+//            dependsOn androidMain
+//            dependsOn jvmCommonTest
+//        }
         jsMain {
             dependencies {
                 implementation kotlin('stdlib-js')
@@ -170,20 +170,20 @@ kotlin {
                 implementation kotlin('test-js')
             }
         }
-        nodejsMain {
-            dependsOn jsMain
-        }
-
-        nodejsTest {
-            dependsOn jsTest
-        }
-
-        browserMain {
-            dependsOn jsMain
-        }
-
-        browserTest {
-            dependsOn jsTest
-        }
+//        nodejsMain {
+//            dependsOn jsMain
+//        }
+//
+//        nodejsTest {
+//            dependsOn jsTest
+//        }
+//
+//        browserMain {
+//            dependsOn jsMain
+//        }
+//
+//        browserTest {
+//            dependsOn jsTest
+//        }
     }
 }
