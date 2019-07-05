@@ -1,26 +1,72 @@
 buildscript {
     ext {
-        kotlin_version = "1.3.31"
-        coroutines_version = "1.1.1"
+        kotlin_version = '1.3.40'
+        serializatoin_version = "0.11.1"
+        coroutines_version = "1.2.2"
+    }
+
+    repositories {
+        google()
+        jcenter()
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:3.1.0'
+        classpath 'com.github.dcendents:android-maven-gradle-plugin:2.1' // Add this line
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+        classpath "org.jetbrains.kotlin:kotlin-serialization:$kotlin_version"
     }
 }
 
 plugins {
-    id 'kotlin-multiplatform' version '1.3.31'
+    id 'kotlin-multiplatform' version '1.3.40'
+}
+
+tasks.whenTaskAdded { task ->
+    if (task.name.contains("install")) {
+//        task.enabled = false
+    }
+}
+
+group 'tz.co.asoft'
+version '2.0.0'
+
+apply plugin: 'com.android.library'
+apply plugin: 'maven-publish'
+apply plugin: 'kotlinx-serialization'
+
+android {
+    compileSdkVersion 28
+    defaultConfig {
+        minSdkVersion 17
+        targetSdkVersion 28
+        versionCode 1
+        versionName "1.0"
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+    }
+
+    sourceSets {
+        main.java.srcDirs += 'src/main/kotlin'
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
 }
 
 repositories {
+    google()
     jcenter()
     maven { url 'https://dl.bintray.com/kotlin/kotlin-eap' }
+    maven { url "https://kotlin.bintray.com/kotlinx" }
+    maven { url 'https://dl.bintray.com/kotlin/kotlin-js-wrappers' }
+    maven { url 'https://dl.bintray.com/kotlinx/kotlinx' }
     maven { url "https://kotlin.bintray.com/kotlinx" }
     maven { url "https://jitpack.io" }
     mavenCentral()
 }
-
-group "com.asofttz"
-version '1.0.4'
-
-apply plugin: "maven-publish"
 
 kotlin {
     jvm() {
@@ -31,42 +77,86 @@ kotlin {
         }
     }
 
+    android() {
+        compilations.all {
+            tasks[compileKotlinTaskName].kotlinOptions {
+                jvmTarget = "1.8"
+            }
+        }
+    }
+
     js() {
+        browser {
+            testTask {
+                useKarma {
+                    useChrome()
+                }
+            }
+        }
+        nodejs()
         compilations.all {
             tasks[compileKotlinTaskName].kotlinOptions {
                 kotlinOptions.metaInfo = true
-                kotlinOptions.outputFile = "$project.buildDir.path/js/${project.name}.js"
                 kotlinOptions.sourceMap = true
                 kotlinOptions.moduleKind = 'commonjs'
                 kotlinOptions.main = "call"
             }
         }
     }
+
+    android {
+        publishLibraryVariants("release")
+    }
+
     sourceSets {
         commonMain {
             dependencies {
                 implementation kotlin('stdlib-common')
-                api "com.github.andylamax:asoft-rx:1.0.3"
+                api "com.github.andylamax:asoft-rx:2.0.2"
                 implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core-common:$coroutines_version"
             }
         }
         commonTest {
+            dependsOn commonMain
             dependencies {
                 implementation kotlin('test-common')
                 implementation kotlin('test-annotations-common')
             }
         }
-        jvmMain {
+
+        jvmCommonMain {
+            dependsOn commonMain
             dependencies {
                 implementation kotlin('stdlib-jdk8')
                 implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutines_version"
             }
         }
-        jvmTest {
+
+        jvmCommonTest {
+            dependsOn jvmCommonMain
             dependencies {
                 implementation kotlin('test')
                 implementation kotlin('test-junit')
             }
+        }
+
+        jvmMain {
+            dependsOn jvmCommonMain
+        }
+
+        jvmTest {
+            dependsOn jvmMain
+            dependsOn jvmCommonTest
+        }
+        androidMain {
+            dependsOn jvmCommonMain
+            dependencies {
+                implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutines_version"
+            }
+        }
+        androidTest {
+            dependsOn androidMain
+            dependsOn jvmCommonTest
         }
         jsMain {
             dependencies {
@@ -75,13 +165,25 @@ kotlin {
             }
         }
         jsTest {
+            dependsOn jsMain
             dependencies {
                 implementation kotlin('test-js')
             }
         }
-    }
-}
+        nodejsMain {
+            dependsOn jsMain
+        }
 
-compileTestKotlinJs {
-    enabled = false
+        nodejsTest {
+            dependsOn jsTest
+        }
+
+        browserMain {
+            dependsOn jsMain
+        }
+
+        browserTest {
+            dependsOn jsTest
+        }
+    }
 }
