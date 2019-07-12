@@ -29,7 +29,7 @@ tasks.whenTaskAdded { task ->
 }
 
 group 'tz.co.asoft'
-version '2.0.2'
+version '2.1.0'
 
 apply plugin: 'com.android.library'
 apply plugin: 'maven-publish'
@@ -170,20 +170,5 @@ kotlin {
                 implementation kotlin('test-js')
             }
         }
-//        nodejsMain {
-//            dependsOn jsMain
-//        }
-//
-//        nodejsTest {
-//            dependsOn jsTest
-//        }
-//
-//        browserMain {
-//            dependsOn jsMain
-//        }
-//
-//        browserTest {
-//            dependsOn jsTest
-//        }
     }
 }
