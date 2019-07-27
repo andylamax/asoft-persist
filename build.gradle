@@ -4,6 +4,7 @@ buildscript {
         serialization_version = "0.11.1"
         coroutines_version = "1.2.2"
         rx_version = "2.0.2"
+        test_version = "1.0.0"
     }
 
     repositories {
@@ -29,7 +30,7 @@ tasks.whenTaskAdded { task ->
 }
 
 group 'tz.co.asoft'
-version '2.2.0'
+version '2.3.0'
 
 apply plugin: 'com.android.library'
 apply plugin: 'kotlinx-serialization'
@@ -114,6 +115,7 @@ kotlin {
             dependencies {
                 implementation kotlin('stdlib-common')
                 api "com.github.andylamax.asoft-rx:asoft-rx-metadata:$rx_version"
+                api "org.jetbrains.kotlinx:kotlinx-coroutines-core-common:$coroutines_version"
                 api "org.jetbrains.kotlinx:kotlinx-serialization-runtime-common:$serialization_version"
             }
         }
@@ -122,10 +124,11 @@ kotlin {
             dependencies {
                 implementation kotlin('test-common')
                 implementation kotlin('test-annotations-common')
+                implementation "com.github.andylamax.asoft-test:asoft-test-metadata:$test_version"
             }
         }
 
-        jvmCommonMain {
+        jvmMain {
             dependencies {
                 implementation kotlin('stdlib-jdk8')
                 implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutines_version"
@@ -134,31 +137,29 @@ kotlin {
             }
         }
 
-        jvmCommonTest {
-            dependsOn jvmCommonMain
+        jvmTest {
+            dependsOn jvmMain
             dependencies {
                 implementation kotlin('test')
                 implementation kotlin('test-junit')
+                implementation "com.github.andylamax.asoft-test:asoft-test-jvm:$test_version"
             }
         }
-
-        jvmMain {
-            dependsOn jvmCommonMain
-        }
-
-        jvmTest {
-            dependsOn jvmMain
-            dependsOn jvmCommonTest
-        }
         androidMain {
-            dependsOn jvmCommonMain
             dependencies {
+                implementation kotlin('stdlib-jdk8')
                 implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutines_version"
+                api "com.github.andylamax.asoft-rx:asoft-rx-jvm:$rx_version"
+                api "org.jetbrains.kotlinx:kotlinx-serialization-runtime:$serialization_version"
             }
         }
         androidTest {
             dependsOn androidMain
-            dependsOn jvmCommonTest
+            dependencies {
+                implementation kotlin('test')
+                implementation kotlin('test-junit')
+                implementation "com.github.andylamax.asoft-test:asoft-test-android:$test_version"
+            }
         }
         jsMain {
             dependencies {
@@ -172,6 +173,7 @@ kotlin {
             dependsOn jsMain
             dependencies {
                 implementation kotlin('test-js')
+                implementation "com.github.andylamax.asoft-test:asoft-test-js:$test_version"
             }
         }
     }
