@@ -3,7 +3,7 @@ buildscript {
         kotlin_version = '1.3.41'
         serialization_version = "0.11.1"
         coroutines_version = "1.2.2"
-        rx_version = "2.0.2"
+        rx_version = "2.0.4"
         test_version = "1.0.0"
     }
 
@@ -30,7 +30,7 @@ tasks.whenTaskAdded { task ->
 }
 
 group 'tz.co.asoft'
-version '2.3.0'
+version '2.3.1'
 
 apply plugin: 'com.android.library'
 apply plugin: 'kotlinx-serialization'
@@ -149,7 +149,7 @@ kotlin {
             dependencies {
                 implementation kotlin('stdlib-jdk8')
                 implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutines_version"
-                api "com.github.andylamax.asoft-rx:asoft-rx-jvm:$rx_version"
+                api "com.github.andylamax.asoft-rx:asoft-rx-android:$rx_version"
                 api "org.jetbrains.kotlinx:kotlinx-serialization-runtime:$serialization_version"
             }
         }

@@ -4,6 +4,7 @@ import kotlinx.coroutines.*
 import tz.co.asoft.persist.lock.Lock
 import tz.co.asoft.persist.lock.use
 import tz.co.asoft.test.asyncTest
+import kotlin.coroutines.CoroutineContext
 import kotlin.test.Test
 
 class LockTest {
@@ -23,8 +24,8 @@ class LockTest {
         coroutineScope {
             runInLock(1)
             runInLock(2)
-            launch { runInLock(3) }
-            launch { runInLock(4) }
+            launch(Dispatchers.Default) { runInLock(3) }
+            launch(Dispatchers.Unconfined) { runInLock(4) }
         }
     }
 }

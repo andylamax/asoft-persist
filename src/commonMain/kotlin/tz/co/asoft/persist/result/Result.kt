@@ -9,7 +9,7 @@ class Result<out T>(val data: T? = null, val error: String? = null) {
     var status = error == null
 
     @Transient
-    var cause: Cause? = null
+    var cause: Cause? = error?.let { Cause(it) }
 
     companion object {
         fun <T> success(data: T) = Result(data)
