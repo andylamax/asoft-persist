@@ -1,10 +1,10 @@
 package tz.co.asoft.persist.dao
 
 import tz.co.asoft.persist.memory.Memory
-import tz.co.asoft.persist.memory.ObservableMemory
+import tz.co.asoft.rx.lifecycle.LiveData
 
 abstract class PaginatedDao<T> : Dao<T>() {
-    protected var memory = ObservableMemory(Memory<T>())
-    open suspend fun getMemory() = memory
-    open suspend fun loadPage(pageNumber: Int) = memory.pages.getOrElse(pageNumber) { null }
+    open val memoryLive = LiveData(Memory<T>())
+    open suspend fun getMemory() = memoryLive.value
+    open suspend fun loadPage(pageNumber: Int) = getMemory().pages.getOrElse(pageNumber) { null }
 }

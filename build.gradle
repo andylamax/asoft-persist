@@ -1,8 +1,8 @@
 buildscript {
     ext {
-        kotlin_version = '1.3.41'
+        kotlin_version = '1.3.50'
         serialization_version = "0.11.1"
-        coroutines_version = "1.2.2"
+        coroutines_version = "1.3.0"
         rx_version = "2.1.1"
         test_version = "1.0.0"
     }
@@ -20,7 +20,7 @@ buildscript {
 }
 
 plugins {
-    id 'kotlin-multiplatform' version '1.3.41'
+    id 'kotlin-multiplatform' version '1.3.50'
 }
 
 tasks.whenTaskAdded { task ->
@@ -30,7 +30,7 @@ tasks.whenTaskAdded { task ->
 }
 
 group 'tz.co.asoft'
-version '2.5.0'
+version '3.0.0'
 
 apply plugin: 'com.android.library'
 apply plugin: 'kotlinx-serialization'
@@ -120,11 +120,11 @@ kotlin {
             }
         }
         commonTest {
-            dependsOn commonMain
             dependencies {
                 implementation kotlin('test-common')
                 implementation kotlin('test-annotations-common')
                 implementation "com.github.andylamax.asoft-test:asoft-test-metadata:$test_version"
+                implementation "org.spekframework.spek2:spek-dsl-metadata:2.0.7"
             }
         }
 
@@ -138,11 +138,11 @@ kotlin {
         }
 
         jvmTest {
-            dependsOn jvmMain
             dependencies {
                 implementation kotlin('test')
                 implementation kotlin('test-junit')
                 implementation "com.github.andylamax.asoft-test:asoft-test-jvm:$test_version"
+                implementation "org.spekframework.spek2:spek-dsl-jvm:2.0.7"
             }
         }
         androidMain {
@@ -154,11 +154,11 @@ kotlin {
             }
         }
         androidTest {
-            dependsOn androidMain
             dependencies {
                 implementation kotlin('test')
                 implementation kotlin('test-junit')
                 implementation "com.github.andylamax.asoft-test:asoft-test-android:$test_version"
+                implementation "org.spekframework.spek2:spek-dsl-jvm:2.0.7"
             }
         }
         jsMain {
@@ -170,10 +170,10 @@ kotlin {
             }
         }
         jsTest {
-            dependsOn jsMain
             dependencies {
                 implementation kotlin('test-js')
                 implementation "com.github.andylamax.asoft-test:asoft-test-js:$test_version"
+                implementation "org.spekframework.spek2:spek-dsl-js:2.0.7"
             }
         }
     }
