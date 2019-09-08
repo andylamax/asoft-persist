@@ -11,6 +11,8 @@ class Result<out T>(val data: T? = null, val error: String? = null) {
     @Transient
     var cause: Cause? = error?.let { Cause(it) }
 
+    fun respond(): T = data ?: throw cause ?: Cause("Unknown Error")
+
     companion object {
         fun <T> success(data: T) = Result(data)
 

@@ -45,16 +45,16 @@ abstract class Dao<T> {
 
     open suspend fun observe(lifeCycle: LifeCycle, onChange: (List<T>?) -> Unit) = getLiveData().observe(lifeCycle, onChange)
 
-    open suspend fun observeCatching(lifeCycle: LifeCycle, onChange: (Result<List<T>?>) -> Unit) = coroutineScope {
-        val newLiveData = liveData.map { Result.success(it) }
+    open suspend fun observeCatching(lifeCycle: LifeCycle, onChange: (Result<List<T>>) -> Unit) = coroutineScope {
+        val newLiveData = liveData.map { Result(it) }
         launch { newLiveData.value = allCatching() }
-        newLiveData.observe(lifeCycle, onChange)
+        newLiveData.observe(lifeCycle,onChange)
     }
 
     open suspend fun observeForever(onChange: (List<T>?) -> Unit) = getLiveData().observeForever(onChange)
 
-    open suspend fun observeForeverCatching(onChange: (Result<List<T>?>) -> Unit) = coroutineScope {
-        val newLiveData = liveData.map { Result.success(it) }
+    open suspend fun observeForeverCatching(onChange: (Result<List<T>>) -> Unit) = coroutineScope {
+        val newLiveData = liveData.map { Result(it) }
         launch { newLiveData.value = Result.catching { all() } }
         newLiveData.observeForever(onChange)
     }
