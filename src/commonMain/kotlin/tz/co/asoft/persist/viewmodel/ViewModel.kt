@@ -1,6 +1,10 @@
 package tz.co.asoft.persist.viewmodel
 
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.launch
 import tz.co.asoft.persist.repo.Repo
+import tz.co.asoft.rx.lifecycle.LifeCycle
+import tz.co.asoft.rx.lifecycle.LiveData
 
 abstract class ViewModel<T>(private val repo: Repo<T>) {
 
@@ -21,6 +25,12 @@ abstract class ViewModel<T>(private val repo: Repo<T>) {
     open suspend fun load(ids: List<Any>) = repo.load(ids)
 
     open suspend fun load(id: Any) = repo.load(id)
+
+    open fun observe(lifeCycle: LifeCycle, onChange: (List<T>?) -> Unit) = repo.observe(lifeCycle, onChange)
+
+    open fun observeForever(onChange: (List<T>?) -> Unit) = repo.observeForever(onChange)
+
+    open suspend fun getLiveData() = repo.getLiveData()
 
     open val allLive get() = repo.allLive
 
