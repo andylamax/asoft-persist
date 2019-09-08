@@ -30,7 +30,7 @@ tasks.whenTaskAdded { task ->
 }
 
 group 'tz.co.asoft'
-version '3.1.0'
+version '3.2.0'
 
 apply plugin: 'com.android.library'
 apply plugin: 'kotlinx-serialization'
