@@ -13,7 +13,7 @@ abstract class Repo<T>(private val dao: Dao<T>) {
 
     open suspend fun create(list: List<T>) = dao.create(list)
 
-    open suspend fun create(t: T) = dao.create(listOf(t))?.first()
+    open suspend fun create(t: T) = dao.create(t)
 
     open suspend fun createCatching(list: List<T>) = Result.catching { create(list) }
 
@@ -48,7 +48,7 @@ abstract class Repo<T>(private val dao: Dao<T>) {
     open suspend fun observeCatching(lifeCycle: LifeCycle, onChange: (Result<List<T>>) -> Unit) = coroutineScope {
         val newLiveData = liveData.map { Result(it) }
         launch { newLiveData.value = allCatching() }
-        newLiveData.observe(lifeCycle,onChange)
+        newLiveData.observe(lifeCycle, onChange)
     }
 
     open suspend fun observeForever(onChange: (List<T>?) -> Unit) = getLiveData().observeForever(onChange)

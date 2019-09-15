@@ -13,7 +13,7 @@ abstract class ViewModel<T>(private val repo: Repo<T>) {
 
     open suspend fun create(list: List<T>) = repo.create(list)
 
-    open suspend fun create(t: T) = repo.create(listOf(t))?.first()
+    open suspend fun create(t: T) = repo.create(t)
 
     open suspend fun createCatching(list: List<T>) = Result.catching { create(list) }
 
