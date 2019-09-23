@@ -1,6 +1,8 @@
 package tz.co.asoft.persist.storage
 
-actual class Storage actual constructor(ctx: Any, name: String) {
+import tz.co.asoft.platform.Ctx
+
+actual class Storage actual constructor(ctx: Ctx, name: String) {
     actual val name: String
         get() = throw Throwable("Implemented for JS (browser) and Android Only")
 

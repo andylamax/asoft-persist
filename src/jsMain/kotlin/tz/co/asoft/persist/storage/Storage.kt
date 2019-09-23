@@ -3,9 +3,10 @@ package tz.co.asoft.persist.storage
 import kotlinx.coroutines.*
 import org.w3c.dom.get
 import org.w3c.dom.set
+import tz.co.asoft.platform.Ctx
 import kotlin.browser.window
 
-actual class Storage actual constructor(ctx: Any, actual val name: String) {
+actual class Storage actual constructor(ctx: Ctx, actual val name: String) {
     private val db = window.localStorage
 
     private fun getTable(): dynamic {
@@ -17,11 +18,11 @@ actual class Storage actual constructor(ctx: Any, actual val name: String) {
     }
 
     actual suspend fun get(key: String): String? = withContext(Dispatchers.Unconfined) {
-        getTable()[key]
+        getTable()[key].unsafeCast<String?>()
     }
 
     actual suspend fun set(key: String, value: String) {
-        GlobalScope.launch(Dispatchers.Unconfined) {
+        withContext(Dispatchers.Unconfined) {
             val table = getTable()
             table[key] = value
             db[name] = JSON.stringify(table)

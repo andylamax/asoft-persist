@@ -3,10 +3,10 @@ package tz.co.asoft.persist.storage
 import android.content.Context
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import tz.co.asoft.platform.Ctx
 
-actual class Storage actual constructor(ctx: Any, actual val name: String) {
-    private val context = ctx as Context
-    private val db = context.getSharedPreferences(name, Context.MODE_PRIVATE)
+actual class Storage actual constructor(ctx: Ctx, actual val name: String) {
+    private val db = ctx.getSharedPreferences(name, Context.MODE_PRIVATE)
 
     actual suspend fun get(key: String): String? = withContext(Dispatchers.IO) {
         db.getString(key, null)
