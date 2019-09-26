@@ -47,7 +47,11 @@ abstract class ViewModel<T>(private val repo: Repo<T>) {
 
     open suspend fun observeCatching(lifeCycle: LifeCycle, onChange: (Result<List<T>>) -> Unit) = coroutineScope {
         val newLiveData = liveData.map { Result(it) }
-        launch { newLiveData.value = allCatching() }
+        launch {
+            val res = allCatching()
+            res.data?.let { liveData.value = it }
+            res.cause?.let { if (liveData.value == null) newLiveData.value = res }
+        }
         newLiveData.observe(lifeCycle, onChange)
     }
 
@@ -55,7 +59,11 @@ abstract class ViewModel<T>(private val repo: Repo<T>) {
 
     open suspend fun observeForeverCatching(onChange: (Result<List<T>>) -> Unit) = coroutineScope {
         val newLiveData = liveData.map { Result(it) }
-        launch { newLiveData.value = Result.catching { all() } }
+        launch {
+            val res = allCatching()
+            res.data?.let { liveData.value = it }
+            res.cause?.let { if (liveData.value == null) newLiveData.value = res }
+        }
         newLiveData.observeForever(onChange)
     }
 
@@ -63,10 +71,6 @@ abstract class ViewModel<T>(private val repo: Repo<T>) {
         launch { liveData.value = all() }
         liveData
     }
-
-    @Deprecated("Use getLiveData")
-    open val allLive
-        get() = repo.allLive
 
     open val liveData get() = repo.liveData
 

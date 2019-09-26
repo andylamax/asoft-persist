@@ -1,6 +1,5 @@
 package tz.co.asoft.persist.dao
 
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 import tz.co.asoft.persist.result.Result
@@ -47,7 +46,11 @@ abstract class Dao<T> {
 
     open suspend fun observeCatching(lifeCycle: LifeCycle, onChange: (Result<List<T>>) -> Unit) = coroutineScope {
         val newLiveData = liveData.map { Result(it) }
-        launch { newLiveData.value = allCatching() }
+        launch {
+            val res = allCatching()
+            res.data?.let { liveData.value = it }
+            res.cause?.let { if (liveData.value == null) newLiveData.value = res }
+        }
         newLiveData.observe(lifeCycle, onChange)
     }
 
@@ -55,7 +58,11 @@ abstract class Dao<T> {
 
     open suspend fun observeForeverCatching(onChange: (Result<List<T>>) -> Unit) = coroutineScope {
         val newLiveData = liveData.map { Result(it) }
-        launch { newLiveData.value = Result.catching { all() } }
+        launch {
+            val res = allCatching()
+            res.data?.let { liveData.value = it }
+            res.cause?.let { if (liveData.value == null) newLiveData.value = res }
+        }
         newLiveData.observeForever(onChange)
     }
 
@@ -65,13 +72,6 @@ abstract class Dao<T> {
     }
 
     open val liveData = LiveData<List<T>?>(null)
-
-    @Deprecated("Use getLiveData Instead")
-    open val allLive = LiveData<List<T>?>(null)
-        get() {
-            GlobalScope.launch { field.value = all() }
-            return field
-        }
 
     open suspend fun all(): List<T>? = listOf()
 

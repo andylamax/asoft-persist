@@ -55,7 +55,7 @@ class DaoTest {
 
     @Test
     fun error_handling() = asyncTest {
-        dao.allLive.observeForever {
+        dao.liveData.observeForever {
             println("It reached here")
         }
         delay(2000)
