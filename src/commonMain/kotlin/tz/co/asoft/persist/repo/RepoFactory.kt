@@ -1,14 +1,14 @@
 package tz.co.asoft.persist.repo
 
-import tz.co.asoft.persist.dao.Dao
+import tz.co.asoft.persist.dao.IDao
 import tz.co.asoft.persist.dao.PaginatedDao
 import kotlin.reflect.KClass
 
 object RepoFactory {
-    val repos = mutableMapOf<KClass<*>, Repo<*>>()
+    val repos = mutableMapOf<KClass<*>, IRepo<*>>()
     val paginatedRepos = mutableMapOf<KClass<*>, PaginatedRepo<*>>()
 
-    inline fun <reified T, D : Dao<T>, R : Repo<T>> getRepo(dao: D, builder: (D) -> R = { Repo(dao) as R }): R {
+    inline fun <reified T, D : IDao<T>, R : IRepo<T>> getRepo(dao: D, builder: (D) -> R = { Repo(dao) as R }): R {
         return repos.getOrPut(T::class) { builder(dao) } as R
     }
 

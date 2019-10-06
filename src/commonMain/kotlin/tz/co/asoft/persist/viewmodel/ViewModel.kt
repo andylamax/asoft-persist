@@ -2,12 +2,12 @@ package tz.co.asoft.persist.viewmodel
 
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
-import tz.co.asoft.persist.repo.Repo
+import tz.co.asoft.persist.repo.IRepo
 import tz.co.asoft.persist.result.Result
 import tz.co.asoft.rx.lifecycle.LifeCycle
 import tz.co.asoft.rx.lifecycle.LiveData
 
-open class ViewModel<T>(private val repo: Repo<T>) {
+open class ViewModel<T>(private val repo: IRepo<T>) {
 
     open suspend fun filter(predicate: (T) -> Boolean) = repo.filter(predicate)
 

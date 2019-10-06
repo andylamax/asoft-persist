@@ -2,50 +2,50 @@ package tz.co.asoft.persist.repo
 
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
-import tz.co.asoft.persist.dao.Dao
+import tz.co.asoft.persist.dao.IDao
 import tz.co.asoft.persist.result.Result
 import tz.co.asoft.rx.lifecycle.LifeCycle
 import tz.co.asoft.rx.lifecycle.LiveData
 
-open class Repo<T>(private val dao: Dao<T>) {
+open class Repo<T>(private val dao: IDao<T>) : IRepo<T> {
 
-    open suspend fun filter(predicate: (T) -> Boolean) = dao.filter(predicate)
+    override suspend fun filter(predicate: (T) -> Boolean) = dao.filter(predicate)
 
-    open suspend fun create(list: List<T>) = dao.create(list)
+    override suspend fun create(list: List<T>) = dao.create(list)
 
-    open suspend fun create(t: T) = dao.create(t)
+    override suspend fun create(t: T) = dao.create(t)
 
-    open suspend fun createCatching(list: List<T>) = Result.catching { create(list) }
+    override suspend fun createCatching(list: List<T>) = Result.catching { create(list) }
 
-    open suspend fun createCatching(t: T) = Result.catching { create(t) }
+    override suspend fun createCatching(t: T) = Result.catching { create(t) }
 
-    open suspend fun edit(list: List<T>) = dao.edit(list)
+    override suspend fun edit(list: List<T>) = dao.edit(list)
 
-    open suspend fun edit(t: T) = dao.edit(t)
+    override suspend fun edit(t: T) = dao.edit(t)
 
-    open suspend fun editCatching(list: List<T>) = Result.catching { edit(list) }
+    override suspend fun editCatching(list: List<T>) = Result.catching { edit(list) }
 
-    open suspend fun editCatching(t: T) = Result.catching { edit(t) }
+    override suspend fun editCatching(t: T) = Result.catching { edit(t) }
 
-    open suspend fun delete(list: List<T>) = dao.delete(list)
+    override suspend fun delete(list: List<T>) = dao.delete(list)
 
-    open suspend fun delete(t: T) = dao.delete(t)
+    override suspend fun delete(t: T) = dao.delete(t)
 
-    open suspend fun deleteCatching(list: List<T>) = Result.catching { delete(list) }
+    override suspend fun deleteCatching(list: List<T>) = Result.catching { delete(list) }
 
-    open suspend fun deleteCatching(t: T) = Result.catching { delete(t) }
+    override suspend fun deleteCatching(t: T) = Result.catching { delete(t) }
 
-    open suspend fun load(ids: List<Any>) = dao.load(ids)
+    override suspend fun load(ids: List<Any>) = dao.load(ids)
 
-    open suspend fun load(id: Any) = dao.load(id)
+    override suspend fun load(id: Any) = dao.load(id)
 
-    open suspend fun loadCatching(ids: List<Any>) = Result.catching { load(ids) }
+    override suspend fun loadCatching(ids: List<Any>) = Result.catching { load(ids) }
 
-    open suspend fun loadCatching(id: Any) = Result.catching { load(id) }
+    override suspend fun loadCatching(id: Any) = Result.catching { load(id) }
 
-    open suspend fun observe(lifeCycle: LifeCycle, onChange: (List<T>?) -> Unit) = getLiveData().observe(lifeCycle, onChange)
+    override suspend fun observe(lifeCycle: LifeCycle, onChange: (List<T>?) -> Unit) = getLiveData().observe(lifeCycle, onChange)
 
-    open suspend fun observeCatching(lifeCycle: LifeCycle, onChange: (Result<List<T>>) -> Unit) = coroutineScope {
+    override suspend fun observeCatching(lifeCycle: LifeCycle, onChange: (Result<List<T>>) -> Unit) = coroutineScope {
         val newLiveData = liveData.map { Result(it) }
         launch {
             val res = allCatching()
@@ -55,9 +55,9 @@ open class Repo<T>(private val dao: Dao<T>) {
         newLiveData.observe(lifeCycle, onChange)
     }
 
-    open suspend fun observeForever(onChange: (List<T>?) -> Unit) = getLiveData().observeForever(onChange)
+    override suspend fun observeForever(onChange: (List<T>?) -> Unit) = getLiveData().observeForever(onChange)
 
-    open suspend fun observeForeverCatching(onChange: (Result<List<T>>) -> Unit) = coroutineScope {
+    override suspend fun observeForeverCatching(onChange: (Result<List<T>>) -> Unit) = coroutineScope {
         val newLiveData = liveData.map { Result(it) }
         launch {
             val res = allCatching()
@@ -67,18 +67,18 @@ open class Repo<T>(private val dao: Dao<T>) {
         newLiveData.observeForever(onChange)
     }
 
-    open suspend fun getLiveData(): LiveData<List<T>?> = coroutineScope {
+    override suspend fun getLiveData(): LiveData<List<T>?> = coroutineScope {
         launch { liveData.value = all() }
         liveData
     }
 
-    open val liveData get() = dao.liveData
+    override val liveData get() = dao.liveData
 
-    open suspend fun all() = dao.all()
+    override suspend fun all() = dao.all()
 
-    open suspend fun allCatching() = dao.allCatching()
+    override suspend fun allCatching() = dao.allCatching()
 
-    suspend fun loadAll() = all()
+    override suspend fun loadAll() = all()
 
-    suspend fun loadAllCatching() = Result.catching { loadAll() }
+    override suspend fun loadAllCatching() = Result.catching { loadAll() }
 }
