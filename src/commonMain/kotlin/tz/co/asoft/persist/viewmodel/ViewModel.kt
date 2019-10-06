@@ -7,7 +7,7 @@ import tz.co.asoft.persist.result.Result
 import tz.co.asoft.rx.lifecycle.LifeCycle
 import tz.co.asoft.rx.lifecycle.LiveData
 
-abstract class ViewModel<T>(private val repo: Repo<T>) {
+open class ViewModel<T>(private val repo: Repo<T>) {
 
     open suspend fun filter(predicate: (T) -> Boolean) = repo.filter(predicate)
 

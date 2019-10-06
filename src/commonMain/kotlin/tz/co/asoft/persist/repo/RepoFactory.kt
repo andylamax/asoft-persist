@@ -7,12 +7,12 @@ import kotlin.reflect.KClass
 object RepoFactory {
     val repos = mutableMapOf<KClass<*>, Repo<*>>()
     val paginatedRepos = mutableMapOf<KClass<*>, PaginatedRepo<*>>()
-    
-    inline fun <reified T> getRepo(dao: Dao<T>) = (repos.getOrPut(T::class) {
-        object : Repo<T>(dao) {}
-    } as Repo<T>)
 
-    inline fun <reified T> getRepo(dao: PaginatedDao<T>) = (paginatedRepos.getOrPut(T::class) {
-        object : PaginatedRepo<T>(dao) {}
-    } as PaginatedRepo<T>)
+    inline fun <reified T, D : Dao<T>, R : Repo<T>> getRepo(dao: D, builder: (D) -> R = { Repo(dao) as R }): R {
+        return repos.getOrPut(T::class) { builder(dao) } as R
+    }
+
+    inline fun <reified T, D : PaginatedDao<T>, R : PaginatedRepo<R>> getRepo(dao: D, builder: (D) -> R = { PaginatedRepo(it) as R }): R {
+        return paginatedRepos.getOrPut(T::class) { builder(dao) } as R
+    }
 }

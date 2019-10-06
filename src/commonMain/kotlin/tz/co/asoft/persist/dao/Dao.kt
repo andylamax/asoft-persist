@@ -3,8 +3,10 @@ package tz.co.asoft.persist.dao
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 import tz.co.asoft.persist.result.Result
+import tz.co.asoft.persist.storage.Storage
 import tz.co.asoft.rx.lifecycle.LifeCycle
 import tz.co.asoft.rx.lifecycle.LiveData
+import kotlin.reflect.KClass
 
 abstract class Dao<T> {
 
