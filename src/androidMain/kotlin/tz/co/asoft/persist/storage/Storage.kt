@@ -3,7 +3,7 @@ package tz.co.asoft.persist.storage
 import android.content.Context
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import tz.co.asoft.platform.Ctx
+import tz.co.asoft.platform.core.Ctx
 
 actual class Storage actual constructor(ctx: Ctx, actual val name: String) {
     private val db = ctx.getSharedPreferences(name, Context.MODE_PRIVATE)

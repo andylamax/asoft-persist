@@ -1,6 +1,6 @@
 package tz.co.asoft.persist.storage
 
-import tz.co.asoft.platform.Ctx
+import tz.co.asoft.platform.core.Ctx
 
 expect class Storage(ctx: Ctx, name: String) {
     val name: String

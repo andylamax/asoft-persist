@@ -3,7 +3,7 @@ package tz.co.asoft.persist.storage
 import kotlinx.coroutines.*
 import org.w3c.dom.get
 import org.w3c.dom.set
-import tz.co.asoft.platform.Ctx
+import tz.co.asoft.platform.core.Ctx
 import kotlin.browser.window
 
 actual class Storage actual constructor(ctx: Ctx, actual val name: String) {

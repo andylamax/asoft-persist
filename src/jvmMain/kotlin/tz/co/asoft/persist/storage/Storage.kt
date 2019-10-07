@@ -1,6 +1,6 @@
 package tz.co.asoft.persist.storage
 
-import tz.co.asoft.platform.Ctx
+import tz.co.asoft.platform.core.Ctx
 
 actual class Storage actual constructor(ctx: Ctx, name: String) {
     actual val name: String
