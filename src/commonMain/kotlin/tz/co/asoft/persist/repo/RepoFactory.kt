@@ -4,6 +4,7 @@ import tz.co.asoft.persist.dao.IDao
 import tz.co.asoft.persist.dao.PaginatedDao
 import kotlin.reflect.KClass
 
+@Deprecated("Use single/only")
 object RepoFactory {
     val repos = mutableMapOf<KClass<*>, IRepo<*>>()
     val paginatedRepos = mutableMapOf<KClass<*>, PaginatedRepo<*>>()

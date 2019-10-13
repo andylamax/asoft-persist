@@ -28,9 +28,9 @@ class Result<out T>(val data: T? = null, var error: String? = null) {
     companion object {
         fun <T> success(data: T) = Result(data)
 
-        fun <T> failure(msg: String): Result<T> = failure(Cause(msg))
+        fun <T> failure(msg: String): Result<T> = Result<T>(null, msg)
 
-        fun <T> failure(cause: Cause) = Result<T>(null, cause.message)
+        fun <T> failure(cause: Cause): Result<T> = failure(cause.message ?: "Unknown Error")
 
         suspend fun <T> catching(script: suspend () -> T?): Result<T> {
             var t: T? = null
