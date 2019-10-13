@@ -4,7 +4,7 @@ import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 import tz.co.asoft.persist.repo.IRepo
 import tz.co.asoft.persist.result.Result
-import tz.co.asoft.rx.lifecycle.LifeCycle
+import tz.co.asoft.rx.lifecycle.ILifeCycle
 import tz.co.asoft.rx.lifecycle.LiveData
 
 open class ViewModel<T>(private val repo: IRepo<T>) {
@@ -43,9 +43,9 @@ open class ViewModel<T>(private val repo: IRepo<T>) {
 
     open suspend fun loadCatching(id: Any) = Result.catching { load(id) }
 
-    open suspend fun observe(lifeCycle: LifeCycle, onChange: (List<T>?) -> Unit) = getLiveData().observe(lifeCycle, onChange)
+    open suspend fun observe(lifeCycle: ILifeCycle, onChange: (List<T>?) -> Unit) = getLiveData().observe(lifeCycle, onChange)
 
-    open suspend fun observeCatching(lifeCycle: LifeCycle, onChange: (Result<List<T>>) -> Unit) = coroutineScope {
+    open suspend fun observeCatching(lifeCycle: ILifeCycle, onChange: (Result<List<T>>) -> Unit) = coroutineScope {
         val newLiveData = liveData.map { Result(it) }
         launch {
             val res = allCatching()

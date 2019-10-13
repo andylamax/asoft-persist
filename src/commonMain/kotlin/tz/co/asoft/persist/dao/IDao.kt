@@ -3,12 +3,12 @@ package tz.co.asoft.persist.dao
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 import tz.co.asoft.persist.result.Result
-import tz.co.asoft.rx.lifecycle.LifeCycle
+import tz.co.asoft.rx.lifecycle.ILifeCycle
 import tz.co.asoft.rx.lifecycle.LiveData
 
 interface IDao<T> {
     val liveData: LiveData<List<T>?>
-    
+
     suspend fun filter(predicate: (T) -> Boolean) = liveData.value?.filter(predicate)
 
     suspend fun create(list: List<T>): List<T>? = list
@@ -43,9 +43,9 @@ interface IDao<T> {
 
     suspend fun loadCatching(id: Any) = Result.catching { load(id) }
 
-    suspend fun observe(lifeCycle: LifeCycle, onChange: (List<T>?) -> Unit) = getLiveData().observe(lifeCycle, onChange)
+    suspend fun observe(lifeCycle: ILifeCycle, onChange: (List<T>?) -> Unit) = getLiveData().observe(lifeCycle, onChange)
 
-    suspend fun observeCatching(lifeCycle: LifeCycle, onChange: (Result<List<T>>) -> Unit) = coroutineScope {
+    suspend fun observeCatching(lifeCycle: ILifeCycle, onChange: (Result<List<T>>) -> Unit) = coroutineScope {
         val newLiveData = liveData.map { Result(it) }
         launch {
             val res = allCatching()

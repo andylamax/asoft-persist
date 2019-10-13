@@ -4,7 +4,7 @@ import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 import tz.co.asoft.persist.dao.IDao
 import tz.co.asoft.persist.result.Result
-import tz.co.asoft.rx.lifecycle.LifeCycle
+import tz.co.asoft.rx.lifecycle.ILifeCycle
 import tz.co.asoft.rx.lifecycle.LiveData
 
 open class Repo<T>(private val dao: IDao<T>) : IRepo<T> {
@@ -43,9 +43,9 @@ open class Repo<T>(private val dao: IDao<T>) : IRepo<T> {
 
     override suspend fun loadCatching(id: Any) = Result.catching { load(id) }
 
-    override suspend fun observe(lifeCycle: LifeCycle, onChange: (List<T>?) -> Unit) = getLiveData().observe(lifeCycle, onChange)
+    override suspend fun observe(lifeCycle: ILifeCycle, onChange: (List<T>?) -> Unit) = getLiveData().observe(lifeCycle, onChange)
 
-    override suspend fun observeCatching(lifeCycle: LifeCycle, onChange: (Result<List<T>>) -> Unit) = coroutineScope {
+    override suspend fun observeCatching(lifeCycle: ILifeCycle, onChange: (Result<List<T>>) -> Unit) = coroutineScope {
         val newLiveData = liveData.map { Result(it) }
         launch {
             val res = allCatching()
