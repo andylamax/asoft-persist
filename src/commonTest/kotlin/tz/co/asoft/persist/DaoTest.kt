@@ -2,11 +2,11 @@ package tz.co.asoft.persist
 
 import kotlinx.coroutines.delay
 import tz.co.asoft.persist.dao.Dao
+import tz.co.asoft.persist.di.onlyDao
+import tz.co.asoft.persist.di.onlyRepo
 import tz.co.asoft.persist.repo.Repo
-import tz.co.asoft.persist.repo.RepoFactory
 import tz.co.asoft.persist.tools.Cause
-import tz.co.asoft.persist.viewmodel.ViewModelFactory
-import tz.co.asoft.rx.lifecycle.LiveData
+import tz.co.asoft.persist.viewmodel.ViewModel
 import tz.co.asoft.test.asyncTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -18,6 +18,7 @@ class DaoTest {
     data class Fruit(val type: String, val no: Int)
 
     class TheDao : Dao<Fruit>() {
+        val q = 9
         override suspend fun create(list: List<Fruit>): List<Fruit>? {
             println("Adding Mango")
             return super.create(list)
@@ -29,9 +30,9 @@ class DaoTest {
         }
     }
 
-    private val dao = TheDao()
-    private val repo = RepoFactory.getRepo(dao)
-    private val vm = ViewModelFactory.getViewModel(repo = repo)
+    private val dao = onlyDao { TheDao() }
+    private val repo = onlyRepo { Repo(dao) }
+    private val vm = ViewModel(repo)
 
     @Test
     fun should_put_1_in_the_list() = asyncTest {
