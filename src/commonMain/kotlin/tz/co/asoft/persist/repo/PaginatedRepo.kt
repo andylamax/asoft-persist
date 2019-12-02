@@ -3,7 +3,7 @@ package tz.co.asoft.persist.repo
 import tz.co.asoft.persist.dao.PaginatedDao
 import tz.co.asoft.persist.memory.Page
 
-open class PaginatedRepo<T>(private val dao: PaginatedDao<T>) : Repo<T>(dao) {
+open class PaginatedRepo<T : Any>(private val dao: PaginatedDao<T>) : Repo<T>(dao) {
 
     open val pages = mutableMapOf<String, Page<T>>()
 

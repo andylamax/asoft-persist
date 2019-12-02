@@ -4,6 +4,7 @@ import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
 
 @Serializable
+@Deprecated("Do not use page")
 class Page<T>(val max: Int = 100) {
     var prevUrl: String? = null
     var nextUrl: String? = null

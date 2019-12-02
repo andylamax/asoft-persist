@@ -1,13 +1,15 @@
 package tz.co.asoft.persist.repo
 
 import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.launch
 import tz.co.asoft.persist.dao.IDao
 import tz.co.asoft.persist.result.Result
 import tz.co.asoft.rx.lifecycle.ILifeCycle
 import tz.co.asoft.rx.lifecycle.LiveData
 
-open class Repo<T>(private val dao: IDao<T>) : IRepo<T> {
+open class Repo<T : Any>(private val dao: IDao<T>) : IRepo<T> {
 
     override suspend fun filter(predicate: (T) -> Boolean) = dao.filter(predicate)
 

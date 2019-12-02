@@ -1,5 +1,6 @@
 package tz.co.asoft.persist.memory
 
+@Deprecated("Never use memory")
 open class Memory<T>(val perPage: Int = 100) {
     var pages = mutableMapOf<Int, Page<T>>().apply {
         put(0, newFirstPage())

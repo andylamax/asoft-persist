@@ -7,7 +7,8 @@ import tz.co.asoft.persist.result.Result
 import tz.co.asoft.rx.lifecycle.ILifeCycle
 import tz.co.asoft.rx.lifecycle.LiveData
 
-open class ViewModel<T>(private val repo: IRepo<T>) {
+@Deprecated("Use custom view models for each component")
+open class ViewModel<T : Any>(private val repo: IRepo<T>) {
 
     open suspend fun filter(predicate: (T) -> Boolean) = repo.filter(predicate)
 
