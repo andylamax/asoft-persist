@@ -7,7 +7,7 @@ import kotlin.test.assertNotNull
 class ResultTest {
     @Test
     fun should_not_respond_with_null() {
-        val res = Result.success<List<Int>?>(listOf(1))
+        val res = Result.success(listOf(1))
         assertNotNull(res.respond())
     }
 }

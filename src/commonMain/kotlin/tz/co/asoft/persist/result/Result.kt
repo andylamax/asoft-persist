@@ -5,7 +5,7 @@ import kotlinx.serialization.Transient
 import tz.co.asoft.persist.tools.Cause
 
 @Serializable
-class Result<out T>(val data: T? = null, var error: String? = null) {
+data class Result<T : Any>(val data: T? = null, var error: String? = null) {
     var status = error == null
 
     @Transient
@@ -15,34 +15,27 @@ class Result<out T>(val data: T? = null, var error: String? = null) {
         if (data != null) {
             return data
         } else {
-            val c = cause
-            if (c != null) {
-                throw c
-            } else {
-                error = "Unknown Error"
-                throw Cause(error)
-            }
+            val c = cause ?: Cause("Unknown Error")
+            error = c.message
+            throw c
         }
     }
 
+    inline fun collect(action: (T) -> Unit): Result<T> {
+        data?.let(action)
+        return this
+    }
+
+    inline fun catch(action: (Cause) -> Unit): Result<T> {
+        cause?.let(action)
+        return this
+    }
+
     companion object {
-        fun <T> success(data: T) = Result(data)
+        fun <T : Any> success(data: T) = Result(data)
 
-        fun <T> failure(msg: String): Result<T> = Result<T>(null, msg)
+        fun <T : Any> failure(msg: String) = Result<T>(null, msg)
 
-        fun <T> failure(cause: Cause): Result<T> = failure(cause.message ?: "Unknown Error")
-
-        suspend fun <T> catching(script: suspend () -> T?): Result<T> {
-            var t: T? = null
-            var cause: Cause? = null
-            try {
-                t = script()
-            } catch (c: Cause) {
-                cause = c
-            }
-            return Result(t, cause?.message).also {
-                it.cause = cause
-            }
-        }
+        fun <T : Any> failure(cause: Cause): Result<T> = failure(cause.message ?: "Unknown Error")
     }
 }

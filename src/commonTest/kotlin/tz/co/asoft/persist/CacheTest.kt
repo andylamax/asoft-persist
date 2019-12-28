@@ -17,7 +17,7 @@ class CacheTest {
     fun should_save_to_cache() = asyncTest {
         val pToSave = Person().apply { uid = "1" }
         cache.create(pToSave)
-        assertEquals(1, cache.all()?.size)
+        assertEquals(1, cache.all().size)
 
         val loadedPerson = cache.load(1)
         assertEquals(pToSave, loadedPerson)

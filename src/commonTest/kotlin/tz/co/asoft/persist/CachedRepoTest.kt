@@ -18,11 +18,11 @@ class CachedRepoTest {
     class HeavyDao : Dao<Person>() {
         private val data = mutableMapOf<String, Person>()
 
-        override suspend fun create(t: Person): Person? {
+        override suspend fun create(t: Person): Person {
             return data.getOrPut(t.uid) { t }
         }
 
-        override suspend fun all(): List<Person>? {
+        override suspend fun all(): List<Person> {
             delay(5000)
             return data.values.toList()
         }
