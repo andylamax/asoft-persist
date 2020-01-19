@@ -40,11 +40,11 @@ class CachedRepoTest {
         println("Creating person")
         repo.create(p1)
         println("Created person. Loading all people")
-        assertEquals(1, repo.cache.all()?.size, "Cached size")
-        assertEquals(1, repo.dao.all()?.size, "Dao size")
-        assertEquals(1, repo.all()?.size)
+        assertEquals(1, repo.cache.all().size, "Cached size")
+        assertEquals(1, repo.dao.all().size, "Dao size")
+        assertEquals(1, repo.all().size)
         println("Loaded everyone.Loading again")
-        assertEquals(1, repo.all()?.size)
+        assertEquals(1, repo.all().size)
 
         var flowCount = 0
         repo.allFlow().collect {

@@ -42,13 +42,13 @@ class MultiDaoTest {
         val teach1 = Teacher().apply { uid = "t1" }
         val emp1 = Employee().apply { uid = "e1" }
         dao.create(stud1)
-        assertEquals(1, dao.all()?.size)
+        assertEquals(1, dao.all().size)
 
         dao.create(teach1)
-        assertEquals(2, dao.all()?.size)
+        assertEquals(2, dao.all().size)
 
         dao.create(emp1)
-        assertEquals(3, dao.all()?.size)
+        assertEquals(3, dao.all().size)
 
         val loadedTeach1 = dao.load("t1")
         assertEquals(teach1, loadedTeach1)
@@ -69,13 +69,13 @@ class MultiDaoTest {
         val teach1 = Teacher().apply { uid = "t1" }
         val emp1 = Employee().apply { uid = "e1" }
         repo.create(stud1)
-        assertEquals(1, repo.all()?.size)
+        assertEquals(1, repo.all().size)
 
         repo.create(teach1)
-        assertEquals(2, repo.all()?.size)
+        assertEquals(2, repo.all().size)
 
         repo.create(emp1)
-        assertEquals(3, repo.all()?.size)
+        assertEquals(3, repo.all().size)
 
         val loadedTeach1 = repo.load("t1")
         assertEquals(teach1, loadedTeach1)

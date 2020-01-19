@@ -5,7 +5,8 @@ buildscript {
         coroutines_version = "1.3.3"
         test_version = "4.0.0"
         platform_version = "3.0.0"
-        android_build_tools_version = "3.3.2"
+        android_build_tools_version = "3.5.2"
+        atomicfu_version = "0.14.1"
     }
 
     repositories {
@@ -31,7 +32,7 @@ tasks.whenTaskAdded { task ->
 }
 
 group 'tz.co.asoft'
-version '14.0.2'
+version '14.1.0'
 
 apply plugin: 'com.android.library'
 apply plugin: 'kotlinx-serialization'
@@ -92,13 +93,7 @@ kotlin {
     }
 
     js() {
-//        browser {
-//            testTask {
-//                useKarma {
-//                    useChrome()
-//                }
-//            }
-//        }
+//        browser()
 //        nodejs()
         compilations.all {
             tasks[compileKotlinTaskName].kotlinOptions {
@@ -117,8 +112,10 @@ kotlin {
                 api "com.github.andylamax.asoft-platform:asoft-platform-metadata:$platform_version"
                 api "org.jetbrains.kotlinx:kotlinx-coroutines-core-common:$coroutines_version"
                 api "org.jetbrains.kotlinx:kotlinx-serialization-runtime-common:$serialization_version"
+                api "org.jetbrains.kotlinx:atomicfu-common:$atomicfu_version"
             }
         }
+
         commonTest {
             dependencies {
                 implementation kotlin('test-common')
@@ -133,6 +130,7 @@ kotlin {
                 implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutines_version"
                 api "com.github.andylamax.asoft-platform:asoft-platform-jvm:$platform_version"
                 api "org.jetbrains.kotlinx:kotlinx-serialization-runtime:$serialization_version"
+                api "org.jetbrains.kotlinx:atomicfu:$atomicfu_version"
             }
         }
 
@@ -143,14 +141,17 @@ kotlin {
                 implementation "com.github.andylamax.asoft-test:asoft-test-jvm:$test_version"
             }
         }
+
         androidMain {
             dependencies {
                 implementation kotlin('stdlib-jdk8')
                 implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutines_version"
                 api "com.github.andylamax.asoft-platform:asoft-platform-android:$platform_version"
                 api "org.jetbrains.kotlinx:kotlinx-serialization-runtime:$serialization_version"
+                api "org.jetbrains.kotlinx:atomicfu:$atomicfu_version"
             }
         }
+
         androidTest {
             dependencies {
                 implementation kotlin('test')
@@ -164,6 +165,7 @@ kotlin {
                 implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core-js:$coroutines_version"
                 api "com.github.andylamax.asoft-platform:asoft-platform-js:$platform_version"
                 api "org.jetbrains.kotlinx:kotlinx-serialization-runtime-js:$serialization_version"
+                api "org.jetbrains.kotlinx:atomicfu-js:$atomicfu_version"
             }
         }
         jsTest {
