@@ -6,7 +6,7 @@ import tz.co.asoft.persist.tools.isInstanceOf
 import kotlin.reflect.KClass
 
 interface IMultiDao<T : Any> : IDao<T> {
-    val daos: MutableMap<KClass<*>, IDao<T>>
+    val daos: MutableMap<KClass<out T>, IDao<T>>
 
     private val T.dao: IDao<T>? get() = daos.keys.firstOrNull { this.isInstanceOf(it) }?.let { daos[it] }
 
@@ -21,9 +21,11 @@ interface IMultiDao<T : Any> : IDao<T> {
 
     override suspend fun all(): List<T> = loadAllByType().values.flatten()
 
-    suspend fun loadAllByType(): Map<KClass<*>, List<T>> = coroutineScope {
-        daos.mapValues { (_, dao) -> async { dao.all() } }.mapValues { (_, defs) -> defs.await() ?: listOf() }
+    suspend fun loadAllByType(): Map<KClass<out T>, List<T>> = coroutineScope {
+        daos.mapValues { (_, dao) -> async { dao.all() } }.mapValues { (_, defs) ->
+            defs.await()
+        }
     }
 
-    suspend fun loadAll(clazz: KClass<*>): List<T>? = daos[clazz]?.all()
+    suspend fun <E : T> loadAll(clazz: KClass<E>): List<E> = daos[clazz]?.all() as List<E>
 }

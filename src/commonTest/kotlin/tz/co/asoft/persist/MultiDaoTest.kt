@@ -26,12 +26,16 @@ class MultiDaoTest {
         var course = "OLevel"
     }
 
+    open class Animal {
+        var name = ""
+    }
+
     val teachersDao = Cache<Teacher>()
     val employeesDao = Cache<Employee>()
     val studentsDao = Cache<Student>()
 
     @Test
-    fun should_add_a_student() = asyncTest {
+    fun should_add_a_person() = asyncTest {
         val dao = MultiDao(
                 Teacher::class to teachersDao,
                 Employee::class to employeesDao,
@@ -53,7 +57,7 @@ class MultiDaoTest {
         val loadedTeach1 = dao.load("t1")
         assertEquals(teach1, loadedTeach1)
 
-        assertEquals(1, dao.loadAll(Teacher::class)?.size)
+        assertEquals(1, dao.loadAll(Teacher::class).size)
     }
 
     @Test
@@ -79,5 +83,34 @@ class MultiDaoTest {
 
         val loadedTeach1 = repo.load("t1")
         assertEquals(teach1, loadedTeach1)
+    }
+
+    @Test
+    fun should_fetch_a_single_class() = asyncTest {
+        val dao = MultiDao(
+                Teacher::class to teachersDao,
+                Employee::class to employeesDao,
+                Student::class to studentsDao
+        )
+
+        val stud1 = Student().apply { uid = "s1" }
+        val teach1 = Teacher().apply { uid = "t1" }
+        val emp1 = Employee().apply { uid = "e1" }
+        dao.create(stud1)
+        assertEquals(1, dao.all().size)
+
+        dao.create(teach1)
+        assertEquals(2, dao.all().size)
+
+        dao.create(emp1)
+        assertEquals(3, dao.all().size)
+
+        val loadedTeach1 = dao.load("t1")
+        assertEquals(teach1, loadedTeach1)
+
+        val employes = dao.loadAll(Employee::class)
+        assertEquals(1, employes.size)
+
+        assertEquals(3, dao.loadAllByType().size)
     }
 }
