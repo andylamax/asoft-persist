@@ -3,6 +3,7 @@ package tz.co.asoft.persist
 import tz.co.asoft.persist.dao.Cache
 import tz.co.asoft.persist.dao.MultiDao
 import tz.co.asoft.persist.model.Entity
+import tz.co.asoft.persist.repo.MultiRepo
 import tz.co.asoft.persist.repo.Repo
 import tz.co.asoft.test.asyncTest
 import kotlin.test.Test
@@ -112,5 +113,15 @@ class MultiDaoTest {
         assertEquals(1, employes.size)
 
         assertEquals(3, dao.loadAllByType().size)
+    }
+
+    @Test
+    fun should_work_well_with_a_multi_repo() = asyncTest {
+        val repo = MultiRepo(MultiDao(
+                Teacher::class to teachersDao,
+                Employee::class to employeesDao,
+                Student::class to studentsDao
+        ))
+        assertEquals(repo.loadAllByType().size, 3)
     }
 }

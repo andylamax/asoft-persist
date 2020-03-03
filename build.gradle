@@ -32,7 +32,7 @@ tasks.whenTaskAdded { task ->
 }
 
 group 'tz.co.asoft'
-version '15.0.0'
+version '15.1.0'
 
 apply plugin: 'com.android.library'
 apply plugin: 'kotlinx-serialization'
@@ -174,5 +174,11 @@ kotlin {
                 implementation "com.github.andylamax.asoft-test:asoft-test-js:$test_version"
             }
         }
+    }
+}
+
+publishing {
+    publications {
+        kotlinMultiplatform {}
     }
 }
