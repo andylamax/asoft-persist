@@ -32,7 +32,7 @@ tasks.whenTaskAdded { task ->
 }
 
 group 'tz.co.asoft'
-version '15.1.0'
+version '15.1.1'
 
 apply plugin: 'com.android.library'
 apply plugin: 'kotlinx-serialization'
@@ -179,6 +179,8 @@ kotlin {
 
 publishing {
     publications {
-        kotlinMultiplatform {}
+        kotlinMultiplatform {
+            artifactId = "persist"
+        }
     }
 }
