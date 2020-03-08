@@ -3,7 +3,7 @@ package tz.co.asoft.persist
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collect
 import tz.co.asoft.persist.dao.Cache
-import tz.co.asoft.persist.dao.Dao
+import tz.co.asoft.persist.dao.IDao
 import tz.co.asoft.persist.model.Entity
 import tz.co.asoft.persist.repo.CachedRepo
 import tz.co.asoft.test.asyncTest
@@ -15,18 +15,7 @@ class CachedRepoTest {
         override var uid = ""
     }
 
-    class HeavyDao : Dao<Person>() {
-        private val data = mutableMapOf<String, Person>()
-
-        override suspend fun create(t: Person): Person {
-            return data.getOrPut(t.uid) { t }
-        }
-
-        override suspend fun all(): List<Person> {
-            delay(5000)
-            return data.values.toList()
-        }
-    }
+    class HeavyDao : Cache<Person>()
 
     val personCache = Cache<Person>()
     val personDao = HeavyDao()

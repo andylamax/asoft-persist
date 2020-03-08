@@ -3,7 +3,7 @@ package tz.co.asoft.persist.dao
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
 
-class AsyncDao<T : Any>(vararg individualDaos: IDao<out T>) : IDao<T> {
+open class AsyncDao<T : Any>(vararg individualDaos: IDao<out T>) : IDao<T> {
 
     private val daos: List<IDao<T>> = individualDaos.map { it as IDao<T> }
 

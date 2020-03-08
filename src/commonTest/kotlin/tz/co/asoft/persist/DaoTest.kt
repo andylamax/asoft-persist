@@ -1,9 +1,10 @@
 package tz.co.asoft.persist
 
 import kotlinx.coroutines.delay
-import tz.co.asoft.persist.dao.Dao
+import tz.co.asoft.persist.dao.Cache
 import tz.co.asoft.persist.di.onlyDao
 import tz.co.asoft.persist.di.onlyRepo
+import tz.co.asoft.persist.model.Entity
 import tz.co.asoft.persist.repo.Repo
 import tz.co.asoft.persist.tools.Cause
 import tz.co.asoft.test.asyncTest
@@ -13,9 +14,11 @@ import kotlin.test.assertEquals
 class DaoTest {
     private val list = mutableListOf<Int>()
 
-    data class Fruit(val type: String, val no: Int)
+    data class Fruit(val type: String, val no: Int) : Entity {
+        override var uid = ""
+    }
 
-    class TheDao : Dao<Fruit>() {
+    class TheDao : Cache<Fruit>() {
         val q = 9
         override suspend fun create(list: List<Fruit>): List<Fruit> {
             println("Adding Mango")

@@ -1,12 +1,12 @@
 buildscript {
     ext {
-        kotlin_version = '1.3.61'
-        serialization_version = "0.14.0"
-        coroutines_version = "1.3.3"
+        kotlin_version = '1.3.70'
+        serialization_version = "0.20.0"
+        coroutines_version = "1.3.4"
         test_version = "4.0.0"
-        platform_version = "3.1.0"
-        android_build_tools_version = "3.5.2"
-        atomicfu_version = "0.14.1"
+        platform_version = "3.2.0"
+        android_build_tools_version = "3.6.0"
+        atomicfu_version = "0.14.2"
     }
 
     repositories {
@@ -22,17 +22,11 @@ buildscript {
 }
 
 plugins {
-    id 'kotlin-multiplatform' version '1.3.61'
-}
-
-tasks.whenTaskAdded { task ->
-    if (task.name.contains("install")) {
-//        task.enabled = false
-    }
+    id 'kotlin-multiplatform' version '1.3.70'
 }
 
 group 'tz.co.asoft'
-version '15.1.1'
+version '16.0.0'
 
 apply plugin: 'com.android.library'
 apply plugin: 'kotlinx-serialization'
@@ -42,7 +36,6 @@ android {
     compileSdkVersion 28
     defaultConfig {
         minSdkVersion 9
-        targetSdkVersion 28
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
 
@@ -88,19 +81,16 @@ kotlin {
                 jvmTarget = "1.8"
             }
         }
-
         publishLibraryVariants("release")
     }
 
     js() {
-//        browser()
-//        nodejs()
         compilations.all {
             tasks[compileKotlinTaskName].kotlinOptions {
-                kotlinOptions.metaInfo = true
-                kotlinOptions.sourceMap = true
-                kotlinOptions.moduleKind = 'commonjs'
-                kotlinOptions.main = "call"
+                metaInfo = true
+                sourceMap = true
+                moduleKind = 'commonjs'
+                main = "call"
             }
         }
     }
@@ -123,28 +113,9 @@ kotlin {
                 implementation "com.github.andylamax.asoft-test:asoft-test-metadata:$test_version"
             }
         }
-
-        jvmMain {
-            dependencies {
-                implementation kotlin('stdlib-jdk8')
-                implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutines_version"
-                api "com.github.andylamax.asoft-platform:asoft-platform-jvm:$platform_version"
-                api "org.jetbrains.kotlinx:kotlinx-serialization-runtime:$serialization_version"
-                api "org.jetbrains.kotlinx:atomicfu:$atomicfu_version"
-            }
-        }
-
-        jvmTest {
-            dependencies {
-                implementation kotlin('test')
-                implementation kotlin('test-junit')
-                implementation "com.github.andylamax.asoft-test:asoft-test-jvm:$test_version"
-            }
-        }
-
         androidMain {
             dependencies {
-                implementation kotlin('stdlib-jdk8')
+                implementation kotlin('stdlib')
                 implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutines_version"
                 api "com.github.andylamax.asoft-platform:asoft-platform-android:$platform_version"
                 api "org.jetbrains.kotlinx:kotlinx-serialization-runtime:$serialization_version"
@@ -159,6 +130,22 @@ kotlin {
                 implementation "com.github.andylamax.asoft-test:asoft-test-android:$test_version"
             }
         }
+        jvmMain {
+            dependencies {
+                implementation kotlin('stdlib')
+                implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutines_version"
+                api "com.github.andylamax.asoft-platform:asoft-platform-jvm:$platform_version"
+                api "org.jetbrains.kotlinx:kotlinx-serialization-runtime:$serialization_version"
+                api "org.jetbrains.kotlinx:atomicfu:$atomicfu_version"
+            }
+        }
+
+        jvmTest {
+            dependencies {
+                implementation "com.github.andylamax.asoft-test:asoft-test-jvm:$test_version"
+            }
+        }
+
         jsMain {
             dependencies {
                 implementation kotlin('stdlib-js')
@@ -170,17 +157,8 @@ kotlin {
         }
         jsTest {
             dependencies {
-                implementation kotlin('test-js')
                 implementation "com.github.andylamax.asoft-test:asoft-test-js:$test_version"
             }
-        }
-    }
-}
-
-publishing {
-    publications {
-        kotlinMultiplatform {
-            artifactId = "persist"
         }
     }
 }

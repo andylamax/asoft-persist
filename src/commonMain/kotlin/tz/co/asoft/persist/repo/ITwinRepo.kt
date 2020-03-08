@@ -22,6 +22,7 @@ interface ITwinRepo<T : Entity> : IRepo<T> {
 
     override suspend fun wipe(t: T) = remoteDao.wipe(t).also { localDao.wipe(t) }
 
+    @Deprecated("Try using loadFlowing")
     override suspend fun load(id: String): T? {
         val localRes = localDao.load(id)
         return if (localRes != null) {
@@ -32,24 +33,16 @@ interface ITwinRepo<T : Entity> : IRepo<T> {
         }
     }
 
-    override fun loadFlowing(id: String): Flow<T> = flow {
-        var sent = false
-        localDao.load(id)?.let {
-            emit(it)
-            sent = true
-        }
+    override fun loadFlowing(id: String) = flow {
+        localDao.load(id)?.let { emit(it) }
 
-        remoteDao.load(id)?.let {
+        remoteDao.load(id).let {
             emit(it)
-            localDao.create(it)
-            sent = true
-        }
-        if (!sent) {
-            throw Cause("Entity with id: $id, not found")
+            if (it != null) localDao.create(it)
         }
     }
 
-    override fun loadFlowing(ids: List<Any>): Flow<List<T>> = flow {
+    override fun loadFlowing(ids: List<Any>) = flow {
         emit(localDao.load(ids))
         emit(remoteDao.load(ids))
     }
@@ -58,8 +51,8 @@ interface ITwinRepo<T : Entity> : IRepo<T> {
         remoteDao.all().let { localDao.create(it) }
     }
 
-    override fun allFlow(): Flow<List<T>> = flow {
-        emit(localDao.all())
+    override fun allFlowing() = flow {
+        if (localDao.all().isNotEmpty()) emit(localDao.all())
         remoteDao.all().let {
             emit(it)
             localDao.create(it)
