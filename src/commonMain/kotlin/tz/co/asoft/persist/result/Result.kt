@@ -5,6 +5,7 @@ import kotlinx.serialization.Transient
 import tz.co.asoft.persist.tools.Cause
 
 @Serializable
+@Deprecated("Use flows instead")
 data class Result<T : Any>(val data: T? = null, var error: String? = null) {
     var status = error == null
 
